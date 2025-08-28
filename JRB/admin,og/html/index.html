@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Painel — Jr eventos </title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --vermelho: #b30000;
+    --vermelho-escuro: #8a0000;
+    --preto: #000000;
+    --texto: #222;
+    --muted: #555;
+    --border: #e6e6e6;
+    --radius: 10px;
+    --shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: var(--texto);
+  }
+
+  /* Cabeçalho */
+  header {
+    background: var(--preto);
+    color: white;
+    border-bottom: 3px solid var(--vermelho);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  .brand img {
+    height: 50px;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+  }
+  nav a:hover {
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* Layout principal */
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem 3rem;
+  }
+  .grid {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  /* Cards */
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.2rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+  }
+  .card h2 {
+    color: var(--vermelho);
+    margin: .4rem 0;
+  }
+  .card p {
+    color: var(--muted);
+  }
+
+  /* Botões */
+  .btn {
+    display: inline-block;
+    margin-top: .6rem;
+    padding: .7rem 1rem;
+    border-radius: 8px;
+    background: var(--vermelho);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background: var(--vermelho-escuro);
+  }
+
+  /* Botão reset fixo no mobile */
+  @media (max-width: 768px) {
+    .reset-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 5%;
+      right: 5%;
+      z-index: 1000;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <img src="https://ajptour.com/pictures/t/548712-uvt0/elton-rodrigues-marques.jpg" alt="Logo Jr eventos">
+      <span>Jr eventos  | Admin</span>
+    </div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="teams.html">Equipes</a>
+      <a href="athletes.html">Atletas</a>
+      <a href="brackets.html">Chaves</a>
+    </nav>
+  </div>
+</header>
+<a href="https://www.instagram.com/jrbrothersbjj_selvagembjj?igsh=d2ozNHc4OXR4dmZ0"
+   target="_blank"
+   style="display:flex;align-items:center;gap:6px;color:#000;text-decoration:none;">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       width="30" height="30" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.75 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75zM12 7a5 5 0 1 1 0 10a5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7z"/>
+  </svg>
+  <span style="font-size:0.9rem;">Instagram</span>
+</a>
+<main class="grid">
+  <section class="card">
+    <h2>Equipes</h2>
+    <p>Cadastre e gerencie as equipes do campeonato.</p>
+    <a class="btn" href="teams.html">Gerenciar equipes</a>
+  </section>
+  <section class="card">
+    <h2>Atletas</h2>
+    <p>Acompanhe inscrições e dados dos atletas.</p>
+    <a class="btn" href="athletes.html">Ver atletas</a>
+  </section>
+  <section class="card">
+    <h2>Chaves</h2>
+    <p>Gere chaves, registre vencedores e veja o ranking.</p>
+    <a class="btn" href="brackets.html">Gerenciar chaves</a>
+  </section>
+  <section class="card" style="text-align:center;">
+    <h2>Resetar Campeonato</h2>
+    <p>Remove todos os atletas e chaves, mantendo equipes cadastradas.</p>
+    <button id="resetBtn" class="btn reset-btn">Resetar Campeonato</button>
+  </section>
+</main>
+
+<script>
+async function apiDelete(path) {
+  const res = await fetch("http://localhost:4000/api" + path, { method: "DELETE" });
+  return res.json();
+}
+document.getElementById("resetBtn").addEventListener("click", async () => {
+  if (!confirm("Tem certeza que deseja resetar o campeonato? Isso não pode ser desfeito.")) return;
+  const res = await apiDelete("/admin/reset");
+  if (res.success) {
+    alert("Campeonato resetado com sucesso!");
+    location.reload();
+  } else {
+    alert("Erro ao resetar: " + (res.error || "desconhecido"));
+  }
+});
+</script>
+</body>
+</html>

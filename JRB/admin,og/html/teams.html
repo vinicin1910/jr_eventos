@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Equipes — Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --vermelho: #b30000;
+    --vermelho-escuro: #8a0000;
+    --preto: #000000;
+    --texto: #222;
+    --muted: #555;
+    --border: #e6e6e6;
+    --radius: 10px;
+    --shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: var(--texto);
+  }
+
+  /* Cabeçalho */
+  header {
+    background: var(--preto);
+    color: white;
+    border-bottom: 3px solid var(--vermelho);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+  }
+  nav a:hover {
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* Layout principal */
+  main {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem 3rem;
+  }
+
+  /* Card e grid */
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .card h2 {
+    color: var(--vermelho);
+    margin-top: 0;
+  }
+  .grid {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  /* Form */
+  input {
+    width: 100%;
+    padding: .9rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--texto);
+    font-size: 1rem;
+  }
+
+  /* Botões */
+  button {
+    margin-top: .6rem;
+    padding: .8rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--vermelho);
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  button:hover {
+    background: var(--vermelho-escuro);
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">Jr eventos Jiu-Jitsu <span class="muted">| Admin</span></div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="teams.html">Equipes</a>
+      <a href="athletes.html">Atletas</a>
+      <a href="brackets.html">Chaves</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Nova equipe</h2>
+    <form id="teamForm">
+      <input type="text" name="name" placeholder="Nome da equipe" required />
+      <button type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <section id="teamGrid" class="grid"></section>
+</main>
+
+<script>
+const API_BASE="http://localhost:4000/api";
+async function apiGet(p){
+  const r = await fetch(API_BASE+p);
+  return r.json();
+}
+async function apiPost(p,d){
+  const r = await fetch(API_BASE+p,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(d)
+  });
+  return r.json();
+}
+async function loadTeams(){
+  const teams = await apiGet("/admin/teams");
+  document.getElementById("teamGrid").innerHTML = teams.map(t=>`
+    <div class="card">
+      <h3>${t.name}</h3>
+      <p class="muted">ID: ${t.id}</p>
+    </div>
+  `).join("");
+}
+document.addEventListener("DOMContentLoaded",async()=>{
+  await loadTeams();
+  document.getElementById("teamForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const name = e.target.name.value.trim();
+    if(!name) return;
+    const res = await apiPost("/admin/teams",{name});
+    if(!res.error){
+      e.target.reset();
+      loadTeams();
+    }
+  });
+});
+</script>
+</body>
+</html>
