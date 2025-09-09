@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Painel — Jr eventos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --vermelho: #b30000;
+    --vermelho-escuro: #8a0000;
+    --preto: #000000;
+    --texto: #222;
+    --muted: #555;
+    --border: #e6e6e6;
+    --radius: 10px;
+    --shadow: 0 6px 16px rgba(0,0,0,0.06);
+    --ouro: #ffc107;
+    --prata: #c0c0c0;
+    --bronze: #cd7f32;
+  }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: var(--texto);
+  }
+  header {
+    background: var(--preto);
+    color: white;
+    border-bottom: 3px solid var(--vermelho);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  .brand img { height: 50px; }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+  }
+  nav a:hover { background: rgba(255,255,255,0.15); }
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem 3rem;
+  }
+  .grid {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.2rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+  }
+  .card h2 { color: var(--vermelho); margin: .4rem 0; }
+  .card p { color: var(--muted); }
+  .btn {
+    display: inline-block;
+    margin-top: .6rem;
+    padding: .7rem 1rem;
+    border-radius: 8px;
+    background: var(--vermelho);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--vermelho-escuro); }
+  @media (max-width: 768px) {
+    .reset-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 5%;
+      right: 5%;
+      z-index: 1000;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+  }
+  th, td {
+    padding: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+  th { background: #f9f9f9; }
+  .badge {
+    display: inline-block;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: bold;
+    color: #fff;
+  }
+  .gold { background: var(--ouro); color: #000; }
+  .silver { background: var(--prata); color: #000; }
+  .bronze { background: var(--bronze); color: #fff; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <img src="https://ajptour.com/pictures/t/548712-uvt0/elton-rodrigues-marques.jpg" alt="Logo Jr eventos">
+      <span>Jr eventos  | Admin</span>
+    </div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="teams.html">Equipes</a>
+      <a href="athletes.html">Atletas</a>
+      <a href="brackets.html">Chaves</a>
+    </nav>
+  </div>
+</header>
+
+<main class="grid">
+  <section class="card">
+    <h2>Equipes</h2>
+    <p>Cadastre e gerencie as equipes do campeonato.</p>
+    <a class="btn" href="teams.html">Gerenciar equipes</a>
+  </section>
+
+  <section class="card">
+    <h2>Atletas</h2>
+    <p>Acompanhe inscrições e dados dos atletas.</p>
+    <a class="btn" href="athletes.html">Ver atletas</a>
+  </section>
+
+  <section class="card">
+    <h2>Chaves</h2>
+    <p>Gere chaves, registre vencedores e veja o ranking.</p>
+    <a class="btn" href="brackets.html">Gerenciar chaves</a>
+  </section>
+
+  <!-- Card de Ranking -->
+  <section class="card">
+    <h2>Ranking por equipe</h2>
+    <table id="rankingTable">
+      <thead>
+        <tr>
+          <th>Equipe</th>
+          <th>🥇</th>
+          <th>🥈</th>
+          <th>🥉</th>
+          <th>Pontos</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card" style="text-align:center;">
+    <h2>Resetar Campeonato</h2>
+    <p>Remove todos os atletas e chaves, mantendo equipes cadastradas.</p>
+    <button id="resetBtn" class="btn reset-btn">Resetar Campeonato</button>
+  </section>
+</main>
+
+<script>
+async function carregarRanking() {
+  try {
+    const res = await fetch("http://localhost/JRB/backend/src/ranking_list.php");
+    const rank = await res.json();
+    const tb = document.querySelector("#rankingTable tbody");
+
+    if (!rank.length) {
+      tb.innerHTML = `<tr><td colspan="5" class="muted">Sem dados</td></tr>`;
+      return;
+    }
+
+    tb.innerHTML = rank.map(r => `
+      <tr>
+        <td>${r.team_name}</td>
+        <td><span class="badge gold">${r.gold}</span></td>
+        <td><span class="badge silver">${r.silver}</span></td>
+        <td><span class="badge bronze">${r.bronze}</span></td>
+        <td><strong>${r.points}</strong></td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error("Erro ao carregar ranking:", err);
+  }
+}
+
+async function apiDelete(path) {
+  const res = await fetch("http://localhost:4000/api" + path, { method: "DELETE" });
+  return res.json();
+}
+
+document.getElementById("resetBtn").addEventListener("click", async () => {
+  if (!confirm("Tem certeza que deseja resetar o campeonato? Isso não pode ser desfeito.")) return;
+  const res = await apiDelete("/admin/reset");
+  if (res.success) {
+    alert("Campeonato resetado com sucesso!");
+    location.reload();
+  } else {
+    alert("Erro ao resetar: " + (res.error || "desconhecido"));
+  }
+});
+
+document.addEventListener("DOMContentLoaded", carregarRanking);
+</script>
+</body>
+</html>

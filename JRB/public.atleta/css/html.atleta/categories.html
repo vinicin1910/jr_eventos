@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Categorias — Jr eventos Jiu-Jitsu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --vermelho: #b30000;
+    --vermelho-escuro: #8a0000;
+    --preto: #000000;
+    --texto: #222;
+    --muted: #555;
+    --border: #e6e6e6;
+    --radius: 10px;
+    --shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: var(--texto);
+  }
+
+  /* Cabeçalho */
+  header {
+    background: var(--preto);
+    color: white;
+    border-bottom: 3px solid var(--vermelho);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+  }
+  nav a:hover {
+    background: rgba(255,255,255,0.15);
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem 3rem;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-escuro));
+    color: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .hero h1 {
+    margin: 0 0 5px 0;
+  }
+  .hero p {
+    margin: 0;
+    color: #f5f5f5;
+  }
+
+  /* Grid e Cards */
+  .grid {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin-top: 1.2rem;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.1rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+  }
+  .card h3 {
+    color: var(--vermelho);
+    margin: .2rem 0 .5rem 0;
+  }
+  .card p {
+    color: var(--muted);
+  }
+  .button {
+    display: inline-block;
+    margin-top: .6rem;
+    padding: .65rem 1rem;
+    border-radius: 8px;
+    background: var(--vermelho);
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .button:hover {
+    background: var(--vermelho-escuro);
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">Jr eventos Jiu-Jitsu <span class="muted">| Atletas</span></div>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="register.html">Inscrição</a>
+      <a href="categories.html">Categorias</a>
+      <a href="brackets.html">Chaves</a>
+      <a href="ranking.html">Ranking</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Categorias</h1>
+    <p class="muted">Ainda não há nenhuma categoria disponível.</p>
+  </section>
+
+  <section id="catGrid" class="grid"></section>
+</main>
+
+<script>
+async function carregarCategorias() {
+  try {
+    const res = await fetch("http://localhost/JRB/backend/src/categories_list.php");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const cats = await res.json();
+
+    const grid = document.getElementById("catGrid");
+    if (!cats.length) {
+      grid.innerHTML = `<p class="muted">Ainda não há nenhuma categoria disponível.</p>`;
+      return;
+    }
+
+    grid.innerHTML = cats.map(c => `
+      <div class="card">
+        <h3>${c.category_key}</h3>
+        <p class="muted">Atletas: ${c.count}</p>
+        <a class="button" href="brackets.html">Ver chaves</a>
+      </div>
+    `).join("");
+  } catch (err) {
+    console.error("Erro ao carregar categorias:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", carregarCategorias);
+</script>
+</body>
+</html>

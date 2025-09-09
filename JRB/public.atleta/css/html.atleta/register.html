@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Inscrição — Jr eventos Jiu-Jitsu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/css/picker.css">
+<style>
+  :root {
+    --vermelho: #b30000;
+    --vermelho-escuro: #8a0000;
+    --preto: #000000;
+    --texto: #222;
+    --muted: #555;
+    --border: #e6e6e6;
+    --radius: 10px;
+    --shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: var(--texto);
+  }
+  header {
+    background: var(--preto);
+    color: white;
+    border-bottom: 3px solid var(--vermelho);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand { font-weight: bold; font-size: 1.1rem; }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+  }
+  nav a:hover { background: rgba(255,255,255,0.15); }
+  main {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem 3rem;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.3rem;
+  }
+  h2 { color: var(--vermelho); margin-top: 0; }
+  .row {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media(max-width:640px) { .row { grid-template-columns: 1fr; } }
+  input, select {
+    width: 100%; padding: 0.9rem; border-radius: 8px;
+    border: 1px solid var(--border); background: #fff; color: var(--texto);
+    font-size: 1rem;
+  }
+  .button {
+    display: inline-block; margin-top: .6rem; padding: .8rem 1.1rem;
+    border-radius: 8px; background: var(--vermelho); color: #fff;
+    text-decoration: none; border: none; font-weight: 800; cursor: pointer;
+  }
+  .button:hover { background: var(--vermelho-escuro); }
+  .muted { color: var(--muted); }
+  .picker-input.error { border-color: #ffb3b3; box-shadow: 0 0 0 3px #fff0f0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">Jr eventos Jiu-Jitsu <span class="muted">| Atletas</span></div>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="register.html">Inscrição</a>
+      <a href="categories.html">Categorias</a>
+      <a href="brackets.html">Chaves</a>
+      <a href="ranking.html">Ranking</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Inscreva-se</h2>
+    <p class="muted">A categoria é definida automaticamente por idade, peso, faixa e gênero.</p>
+
+    <form id="registerForm" action="http://localhost/JRB/backend/src/register.php" method="POST">
+      <div class="row">
+        <input type="text" name="full_name" placeholder="Nome completo" required />
+
+        <!-- Picker de Faixa -->
+        <div id="beltPicker" class="picker-input">
+          <span class="placeholder">Selecionar faixa</span><span>▾</span>
+        </div>
+        <input type="text" name="belt" id="beltHidden" class="hidden-input" required />
+      </div>
+
+      <div class="row">
+        <select name="gender" required>
+          <option value="">Gênero</option>
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+        </select>
+        <input type="number" name="age" placeholder="Idade" required />
+      </div>
+
+      <div class="row">
+        <input type="number" step="0.1" name="weight_kg" placeholder="Peso (kg)" required />
+
+        <!-- Picker de Equipe -->
+        <div id="teamPicker" class="picker-input">
+          <span class="placeholder">Selecionar equipe</span><span>▾</span>
+        </div>
+        <input type="text" name="team_id" id="teamHidden" class="hidden-input" required />
+      </div>
+
+      <button class="button" type="submit">Enviar inscrição</button>
+    </form>
+
+    <p id="msg" class="muted"></p>
+  </section>
+</main>
+
+<script type="module">
+  import { initBeltPicker, initTeamPicker } from './assets/js/picker.js';
+
+  const beltDisplay = document.getElementById('beltPicker');
+  const beltHidden  = document.getElementById('beltHidden');
+  const teamDisplay = document.getElementById('teamPicker');
+  const teamHidden  = document.getElementById('teamHidden');
+
+  initBeltPicker({
+    displayEl: beltDisplay,
+    hiddenInput: beltHidden
+  });
+
+  initTeamPicker({
+    displayEl: teamDisplay,
+    hiddenInput: teamHidden,
+    fetchTeamsUrl: 'http://localhost/JRB/backend/src/teams_list.php'
+  });
+
+  document.getElementById('registerForm').addEventListener('submit', (e) => {
+    let ok = true;
+    if (!beltHidden.value) { beltDisplay.classList.add('error'); ok = false; }
+    if (!teamHidden.value) { teamDisplay.classList.add('error'); ok = false; }
+    if (!ok) {
+      e.preventDefault();
+      document.getElementById('msg').textContent = 'Por favor, selecione faixa e equipe.';
+    }
+  });
+
+  beltDisplay.addEventListener('click', () => beltDisplay.classList.remove('error'));
+  teamDisplay.addEventListener('click', () => teamDisplay.classList.remove('error'));
+</script>
+</body>
+</html>

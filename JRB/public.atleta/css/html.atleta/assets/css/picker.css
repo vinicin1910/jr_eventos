@@ -1,0 +1,136 @@
+/* Overlay do picker */
+.picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+}
+
+@media (min-width: 640px) {
+  .picker-overlay {
+    align-items: center;
+  }
+}
+
+/* Container do picker */
+.picker-sheet {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 640px) {
+  .picker-sheet {
+    border-radius: 12px;
+  }
+}
+
+/* Cabeçalho */
+.picker-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.picker-title {
+  font-weight: 800;
+  color: #b30000;
+  flex: 1;
+}
+
+/* Busca (para equipes) */
+.picker-search {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+/* Lista rolável */
+.picker-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.picker-item {
+  padding: 12px;
+  border-bottom: 1px solid #f4f4f4;
+  cursor: pointer;
+}
+
+.picker-item:last-child {
+  border-bottom: none;
+}
+
+.picker-item:hover, .picker-item.active {
+  background: #fff5f5;
+}
+
+/* Rodapé */
+.picker-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.picker-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.picker-btn.cancel {
+  background: #eee;
+  color: #333;
+}
+
+.picker-btn.ok {
+  background: #b30000;
+  color: #fff;
+}
+
+/* Input fake (visual) */
+.picker-input {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.picker-input .placeholder {
+  color: #777;
+}
+
+.picker-input .chevron {
+  opacity: 0.6;
+}
+
+/* Esconder inputs reais */
+.hidden-input {
+  position: absolute !important;
+  left: -99999px !important;
+  opacity: 0 !important;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
